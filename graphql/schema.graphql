@@ -1,0 +1,48 @@
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+}
+
+type LaboratoryCategory {
+  id: ID!
+  title: String!
+  tests: [LaboratoryTest!]! @hasMany(relation: "laboratory_tests")
+}
+
+type LaboratoryTest {
+  id: ID!
+  title: String!
+}
+
+scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+scalar JSON @scalar(class: "MLL\\GraphQLScalars\\JSON")
+
+type MedicalRecord {
+  id: ID!
+  patient: User! @belongsTo(relation: "patient")
+  ctscan: String!
+  mri: String!
+  tests: JSON @method(name: "getTests")
+  created_at: DateTime
+}
+
+type Query @guard {
+  medical_categories: [LaboratoryCategory!]! @all
+  me: User @auth
+  medical_records: [MedicalRecord!]! @all @whereAuth(relation: "patient")
+}
+
+type Mutation {
+  login(
+    email: String! 
+    password: String!
+  ): String @field(resolver: "AuthMutator")
+
+  add_medical_record(
+    tests: [Int!]! @rulesForArray(apply: ["exists:laboratory_tests,id"])
+    ctscan: String!
+    mri: String!
+  ): MedicalRecord @field(resolver: "MedicalRecordMutator") @guard
+}

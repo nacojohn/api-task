@@ -11,7 +11,6 @@ class MedicalRecord extends Model
 {
     use HasFactory;
     protected $casts = [
-        'lab_categories' => 'array',
         'lab_tests' => 'array'
     ];
     protected $hidden = ['added_by', 'updated_at', 'created_at'];
