@@ -1,0 +1,402 @@
+{
+	"info": {
+		"_postman_id": "79bd49ca-505b-4d1d-acf3-1c6f4ad24c3e",
+		"name": "Sevenz-API-Task",
+		"description": "Endpoints for Sevenz API Task",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "email",
+							"value": "test@example.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "password",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}login",
+					"host": [
+						"{{url}}login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve Data",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{url}}medical-categories",
+					"host": [
+						"{{url}}medical-categories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Medical Record",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "patient",
+							"value": "3",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "categories[0]",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "categories[1]",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "tests[0]",
+							"value": "4",
+							"type": "text"
+						},
+						{
+							"key": "tests[1]",
+							"value": "3",
+							"type": "text"
+						},
+						{
+							"key": "tests[2]",
+							"value": "4",
+							"type": "text"
+						},
+						{
+							"key": "tests[3]",
+							"value": "6",
+							"type": "text"
+						},
+						{
+							"key": "tests[4]",
+							"value": "8",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "tests[5]",
+							"value": "9",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "tests[6]",
+							"value": "12",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "ctscan",
+							"value": "a scan",
+							"type": "text"
+						},
+						{
+							"key": "mri",
+							"value": "an mri scan",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}medical-record",
+					"host": [
+						"{{url}}medical-record"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Medical Record",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{url}}medical-record",
+					"host": [
+						"{{url}}medical-record"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Graphql Login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/graphql",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation {\n  login(email:\"test@example.com\", password:\"password\")\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/graphql",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Graphql Retrieve Data",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/graphql",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "{\n  medical_categories {\n    id\n    title\n    tests {\n      id\n      title\n    }\n  }\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/graphql",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Graphql Get Medical Record",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/graphql",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "{\n  medical_records {\n    id\n    patient {\n        id\n        name\n        email\n    }\n    tests\n    ctscan\n    mri\n    date_added: created_at\n  }\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/graphql",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Graphql Create Medical Record",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/graphql",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation {\n  add_medical_record(\n    tests: [1,4,6]\n    ctscan: \"new scan\"\n    mri: \"new mri scan\"\n  ) {\n    id\n    patient {\n        id\n        name\n        email\n    }\n    tests\n    ctscan\n    mri\n    date_added: created_at\n  }\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/graphql",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "http://127.0.0.1:8000/api/"
+		},
+		{
+			"key": "token",
+			"value": "1|ymlsh0vXHWweVtm6hsRwWlvcRYOkqVWLZJaxqNVx"
+		}
+	]
+}

@@ -14,6 +14,8 @@
 8. On successful login, copy the token generate
 9. Download the Postman collection and edit the `token` variable by replacing the token with the one generated.
 
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/ead5aeff6fee37c1d069)
+
 ## Table of Contents
 - [Response Format](#response-format)
 - [Response Code](#response-codes)
