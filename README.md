@@ -1,63 +1,303 @@
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## How to setup, run and test the Project
 
-## About Laravel
+1. Pull the repository
+2. Make a duplicate of `.env.example` and rename it to `.env`
+3. Edit the DB and Email Connections (You can use [Mailtrap](https://mailtrap.io))
+4. Run `composer install` command
+5. Run `php artisan migrate --seed` to run the migration and seed the tables
+6. Run `php artisan serve` and make sure it's running on port 8000, else you will have to edit the `url` variable in the Postman Collection
+7. To test the application, kindly use the login details: \
+    **Email:** test@example.com
+    **Password:** password
+8. On successful login, copy the token generate
+9. Download the Postman collection and edit the `token` variable by replacing the token with the one generated.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Table of Contents
+- [Response Format](#response-format)
+- [Response Code](#response-codes)
+- [Headers](#headers)
+- [API Endpoints](#endpoints)
+    1. [Login](#login)
+    2. [Get Medical Categories](#get-medical-categories)
+    3. [Create Medical Record](#create-medical-record)
+    4. [Retrieve Medical Records](#retrieve-medical-records)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Response Format
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+For every successful request with a 200 or 201 response code, the response is formatted like this:
 
-## Learning Laravel
+                {
+                    "success": true (boolean),
+                    "data": (null or an object),
+                    "message": (string)
+                }
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+For every failed request, the response is formatted like this:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+                {
+                    "success": false (boolean),
+                    "message": (string),
+                    "data": (null or an object)
+                }
 
-## Laravel Sponsors
+## Response Codes
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+200 - OK \
+201 - OK \
+429 - Too much request, try again after 30 secs \
+401 - Unauthorized \
+422 - Unprocessed request due to invalid data
 
-### Premium Partners
+## Headers
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+- `Accept` set to `application/json`
+- `Authorization` set to `Bearer {TOKEN}` where required
 
-## Contributing
+## Endpoints
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+URL: `http://127.0.0.1:8000/api/`
 
-## Code of Conduct
+#### Login
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+- Endpoint: `{URL}+'login'`
+- Method: `POST`
+- Body:
 
-## Security Vulnerabilities
+                {
+                    'email' => 'required' (can be username, email or phone),
+                    'password' => 'required'
+                }
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- Successful Response:
+
+                {
+                    "success": true,
+                    "data": {
+                        "token": "1|xxxxxxxxxxxxxxxxxxxxxxxxxx"
+                    },
+                    "message": "Logged in successfully"
+                }
+
+#### Get Medical Categories
+
+- Endpoint: `{URL}+'medical-categories'`
+- Method: `GET`
+- Header: `Authorization`: `Bearer {token}`
+- Failed Response
+
+                {
+                    "message": "Unauthenticated."
+                }
+
+- Successful Response
+
+                {
+                    "success": true,
+                    "data": [
+                        {
+                            "id": 1,
+                            "title": "X-Ray",
+                            "laboratory_tests": [
+                                {
+                                    "id": 1,
+                                    "laboratory_category_id": 1,
+                                    "title": "Chest"
+                                },
+                                {
+                                    "id": 2,
+                                    "laboratory_category_id": 1,
+                                    "title": "cervical vertebrae"
+                                },
+                                {
+                                    "id": 3,
+                                    "laboratory_category_id": 1,
+                                    "title": "thoracic vertebrae"
+                                },
+                            ]
+                        },
+                        {
+                            "id": 2,
+                            "title": "Ultrasound Scan",
+                            "laboratory_tests": [
+                                {
+                                    "id": 10,
+                                    "laboratory_category_id": 2,
+                                    "title": "breast"
+                                },
+                                {
+                                    "id": 11,
+                                    "laboratory_category_id": 2,
+                                    "title": "pelvis"
+                                },
+                                {
+                                    "id": 12,
+                                    "laboratory_category_id": 2,
+                                    "title": "prostrate"
+                                },
+                                {
+                                    "id": 13,
+                                    "laboratory_category_id": 2,
+                                    "title": "thyroid"
+                                }
+                            ]
+                        }
+                    ],
+                    "message": "Retrieved successfully"
+                }
+
+#### Create Medical Record
+
+- Endpoint: `{URL}+'medical-record'`
+- Method: `POST`
+- Header: `Authorization`: `Bearer {token}`
+- Failed Response
+
+                {
+                    "message": "Unauthenticated."
+                }
+
+- Body
+
+                {
+                    'tests' => 'required|array',
+                    'ctscan' => 'required',
+                    'mri' => 'required'
+                }
+
+    **Note:** `tests` is an array of Laboratory Test IDs retrieved using the [Get Medical Categories](#get-medical-categories) endpoint in this format `[1, 5, 39, 2]`
+
+- Successful Response
+
+                {
+                    "success": true,
+                    "data": {
+                        "patient": {
+                            "id": 1,
+                            "name": "Test User",
+                            "email": "test@example.com"
+                        },
+                        "tests": {
+                            "X-Ray": [
+                                {
+                                    "id": 3,
+                                    "laboratory_category_id": 1,
+                                    "title": "Thoracic Vertebrae"
+                                },
+                                {
+                                    "id": 4,
+                                    "laboratory_category_id": 1,
+                                    "title": "Lumvar Vartebrae"
+                                },
+                                {
+                                    "id": 6,
+                                    "laboratory_category_id": 1,
+                                    "title": "Wrist Joint"
+                                }
+                            ]
+                        },
+                        "ctscan": "A Scan",
+                        "mri": "An Mri Scan",
+                        "date_added": "6 seconds ago"
+                    },
+                    "message": "Record saved successfully"
+                }
+
+#### Retrieve Medical Records
+
+- Endpoint: `{URL}+'medical-record'`
+- Method: `GET`
+- Header: `Authorization`: `Bearer {token}`
+- Failed Response
+
+                {
+                    "message": "Unauthenticated."
+                }
+
+- Successful Response
+
+                {
+                    "success": true,
+                    "data": [
+                        {
+                            "patient": {
+                                "id": 1,
+                                "name": "Test User",
+                                "email": "test@example.com"
+                            },
+                            "tests": {
+                                "X-Ray": [
+                                    {
+                                        "id": 3,
+                                        "laboratory_category_id": 1,
+                                        "title": "Thoracic Vertebrae"
+                                    },
+                                    {
+                                        "id": 4,
+                                        "laboratory_category_id": 1,
+                                        "title": "Lumvar Vartebrae"
+                                    },
+                                    {
+                                        "id": 6,
+                                        "laboratory_category_id": 1,
+                                        "title": "Wrist Joint"
+                                    },
+                                    {
+                                        "id": 8,
+                                        "laboratory_category_id": 1,
+                                        "title": "Fingers"
+                                    },
+                                    {
+                                        "id": 9,
+                                        "laboratory_category_id": 1,
+                                        "title": "Toes"
+                                    }
+                                ],
+                                "Ultrasound Scan": [
+                                    {
+                                        "id": 12,
+                                        "laboratory_category_id": 2,
+                                        "title": "Prostrate"
+                                    }
+                                ]
+                            },
+                            "ctscan": "A Scan",
+                            "mri": "An Mri Scan",
+                            "date_added": "25 minutes ago"
+                        },
+                        {
+                            "patient": {
+                                "id": 1,
+                                "name": "Test User",
+                                "email": "test@example.com"
+                            },
+                            "tests": {
+                                "X-Ray": [
+                                    {
+                                        "id": 3,
+                                        "laboratory_category_id": 1,
+                                        "title": "Thoracic Vertebrae"
+                                    },
+                                    {
+                                        "id": 4,
+                                        "laboratory_category_id": 1,
+                                        "title": "Lumvar Vartebrae"
+                                    },
+                                    {
+                                        "id": 6,
+                                        "laboratory_category_id": 1,
+                                        "title": "Wrist Joint"
+                                    }
+                                ]
+                            },
+                            "ctscan": "A Scan",
+                            "mri": "An Mri Scan",
+                            "date_added": "14 seconds ago"
+                        }
+                    ],
+                    "message": "Records retrieved successfully"
+                }
 
 ## License
 
